@@ -126,19 +126,23 @@
     var FilterFog = function(element, settings){
       this.element = element;
       this.settings = settings;
-    }
+    };
 
     FilterFog.prototype.render = function(){
       var opacityPercent = (''+settings.opacity).slice(2,4);
       var filterBlurRadius = this.settings.blurRadius;
       $(this.element).css({
         '-webkit-filter': 'blur('+filterBlurRadius+'px)',
+        '-moz-filter': 'blur('+filterBlurRadius+'px)',
+        'filter': 'blur('+filterBlurRadius+'px)',
         opacity: settings.opacity
       });
-    }
+    };
 
     return this.each(function(index, element) {
       if (settings.cssFilterSupport && '-webkit-filter' in document.body.style){
+        new FilterFog(element, settings).render();
+      } else if (settings.cssFilterSupport && 'filter' in document.body.style) {
         new FilterFog(element, settings).render();
       } else {
         new ManualFog(element, settings).render();
